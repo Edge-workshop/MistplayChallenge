@@ -18,7 +18,7 @@ const val TAG = "ConnectionStateMonitor"
  * box will appear and advise him that he need to be connected
  * **/
 //Class that will detect connection state of device.
-class ConnectionStateMonitor : ConnectivityManager.NetworkCallback() {
+open class ConnectionStateMonitor : ConnectivityManager.NetworkCallback() {
     private lateinit var networkRequest: NetworkRequest
     private lateinit var dialog: Dialog
     private lateinit var mActivity: Activity
@@ -31,7 +31,7 @@ class ConnectionStateMonitor : ConnectivityManager.NetworkCallback() {
             .build()
     }
 
-    open fun enable(activity: Activity) {
+    fun enable(activity: Activity) {
         Log.i(TAG,"is enable")
         mActivity = activity
 
@@ -48,7 +48,7 @@ class ConnectionStateMonitor : ConnectivityManager.NetworkCallback() {
         dialog.setCancelable(false)
     }
 
-    open fun disable(activity: Activity) {
+    fun disable(activity: Activity) {
         Log.i(TAG,"is disable")
         //To unregister connectivity manager calls back
         val connectivityManager =
@@ -59,7 +59,7 @@ class ConnectionStateMonitor : ConnectivityManager.NetworkCallback() {
     override fun onAvailable(network: Network?) {
         Log.i(TAG,"is onAvailable")
         //Function is trigger when connection is available. If so i want to dismiss dialog
-        if (dialog != null && dialog.isShowing) {
+        if (dialog.isShowing) {
             mActivity.runOnUiThread {
                 dialog.dismiss()
             }
