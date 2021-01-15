@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MistplayChallenge</string>
+    <string name="bonus">Bonus</string>
+    <string name="chat">Bavarder</string>
+    <string name="challenge">Défi</string>
+    <string name="connection_lost">Connexion Perdue</string>
+    <string name="check_internet">S\'il vous plaît, vérifiez votre connexion internet et réessayez.</string>
+    <string name="exit_app">Êtes-vous sûre de vouloir quiter défi Mistplay?</string>
+    <string name="exit">Quitter</string>
+    <string name="games">Jeux</string>
+    <string name="menu_not_implemented">n\'est pas encore implémenté.À venir.</string>
+    <string name="no">Non</string>
+    <string name="no_internet_connection">PAS DE CONNEXION INTERNET</string>
+    <string name="profile">Profil</string>
+    <string name="shop">Magasiner</string>
+    <string name="yes">Oui</string>
+</resources>
