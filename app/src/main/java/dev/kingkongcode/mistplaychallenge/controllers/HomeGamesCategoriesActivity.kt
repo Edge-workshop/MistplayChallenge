@@ -1,7 +1,6 @@
 package dev.kingkongcode.mistplaychallenge.controllers
 
 import android.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,8 +14,6 @@ import org.json.JSONArray
 
 class HomeGamesCategoriesActivity : BaseActivity() {
     private lateinit var binding: ActivityHomeGamesCategoriesBinding
-    private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var categoryAdapter: CategoryAdapter
     private var categoryList = arrayListOf<GamesCategories>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,16 +23,23 @@ class HomeGamesCategoriesActivity : BaseActivity() {
         setContentView(binding.root)
 
         //Initializing and setting RecycleView (default orientation = Vertical) with adapter
-        linearLayoutManager = LinearLayoutManager(this@HomeGamesCategoriesActivity)
-        binding.rvGamesCategories.layoutManager = linearLayoutManager
-        categoryAdapter = CategoryAdapter(this@HomeGamesCategoriesActivity, categoryList)
-        binding.rvGamesCategories.adapter = categoryAdapter
+        binding.rvGamesCategories.layoutManager = LinearLayoutManager(this@HomeGamesCategoriesActivity, LinearLayoutManager.VERTICAL, false)
+        binding.rvGamesCategories.adapter = CategoryAdapter(categoryList)
     }
 
     override fun onResume() {
         super.onResume()
+        setUpCategoryListView()
+        setUpBottomNavigation()
 
-        var tempCategoryList = arrayListOf<GamesCategories>()
+    }
+
+    override fun onBackPressed() {
+        setUpExitWarningDialog()
+    }
+
+    private fun setUpCategoryListView() {
+        val tempCategoryList = arrayListOf<GamesCategories>()
         //Fake JSONObject response from Challenge documents
         val jsonArray = JSONArray(Constants.instance.fakeJsonObjResponse)
         for (index in 0 until jsonArray.length()) {
@@ -48,7 +52,8 @@ class HomeGamesCategoriesActivity : BaseActivity() {
         categoryList.clear()
         categoryList.addAll(tempCategoryList)
         binding.rvGamesCategories.adapter?.notifyDataSetChanged()
-
+    }
+    private fun setUpBottomNavigation() {
         //Code section for Bottom Navigation menu item
         /** P.s didn't do anything big just link each one of them with their own specific Toast**/
         binding.bottomNavigation.setOnNavigationItemSelectedListener {
@@ -87,23 +92,25 @@ class HomeGamesCategoriesActivity : BaseActivity() {
             }
         }
     }
-
-    override fun onBackPressed() {
+    private fun setUpExitWarningDialog() {
         /** Decided to create a warning to display for the user if he really wanted to exit the app **/
         // Initialize a new instance
         val builder = AlertDialog.Builder(this@HomeGamesCategoriesActivity)
-        // Set the alert dialog title
-        builder.setTitle(getString(R.string.exit))
-        // Display a message on alert dialog
-        builder.setMessage(getString(R.string.exit_app))
-        // Set a positive button
-        builder.setPositiveButton(getString(R.string.yes)){_, _ ->
-            finish()
+        builder.apply {
+            // Set the alert dialog title
+            setTitle(getString(R.string.exit))
+            // Display a message on alert dialog
+            setMessage(getString(R.string.exit_app))
+            // Set a positive button
+            setPositiveButton(getString(R.string.yes)) {_, _ ->
+                finish()
+            }
+            // Display a negative button on alert dialog
+            setNegativeButton(getString(R.string.no)) {dialog,_ ->
+                dialog.dismiss()
+            }
         }
-        // Display a negative button on alert dialog
-        builder.setNegativeButton(getString(R.string.no)){dialog,_ ->
-            dialog.dismiss()
-        }
+
         val dialog: AlertDialog = builder.create()
         // Display the alert dialog on app interface
         dialog.show()

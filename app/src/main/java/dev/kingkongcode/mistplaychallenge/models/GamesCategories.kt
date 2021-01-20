@@ -5,8 +5,8 @@ import org.json.JSONObject
 
 //Class that will contain data and construct GamesCategories object from JSONObject for category
 class GamesCategories {
-    var listTitle: String = Constants.instance.emptyString
-    var games: ArrayList<Game> = arrayListOf()
+    var listTitle:String = Constants.instance.emptyString
+    var games:ArrayList<Game> = arrayListOf()
 
     constructor(json: JSONObject) {
         this.listTitle = json.optString("list_title")

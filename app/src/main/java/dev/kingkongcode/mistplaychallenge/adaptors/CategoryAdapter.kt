@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dev.kingkongcode.mistplaychallenge.R
@@ -16,41 +17,38 @@ import dev.kingkongcode.mistplaychallenge.models.GamesCategories
  * This Class adapter is the one that show in the RecycleView (Vertical) all the games categories from the fake JSONObject.
  * It have as arguments the context and the list<GamesCategories>
  * */
-class CategoryAdapter(private val mContext: Context, private val dataSet: List<GamesCategories>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(), View.OnClickListener {
+class CategoryAdapter(private val dataSet: List<GamesCategories>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(), View.OnClickListener {
+    private val viewPool = RecyclerView.RecycledViewPool()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var tvCategoryTitle: TextView = itemView.findViewById(R.id.tvCategoryTitle)
         private var rvGamesList: RecyclerView = itemView.findViewById(R.id.rvGamesList)
-        private lateinit var linearLayoutManager: LinearLayoutManager
-        private lateinit var categoryAdapter: GameAdapter
 
         fun bind(category: GamesCategories, position: Int) {
             //Show the game category title
             tvCategoryTitle.text = category.listTitle
             //Setting the 2nd RecycleView and is Orientation to be Horizontal
-            linearLayoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
-            rvGamesList.layoutManager = linearLayoutManager
-            //Passing all the games from that category through a List to the GameAdapter class
-            categoryAdapter = GameAdapter(mContext, category.games)
+            rvGamesList.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
             //Adding the adapter to the RecycleView
-            rvGamesList.adapter = categoryAdapter
+            rvGamesList.adapter = GameAdapter(category.games)
+
         }
     }
 
     override fun onClick(p0: View?) {}
-    override fun getItemCount(): Int {
-        return dataSet.size
-    }
+    override fun getItemCount() = dataSet.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //View of the layout that will be inflated
-        val layout =  R.layout.category_cell
-        val view = LayoutInflater.from(mContext).inflate(layout, parent, false)
-        return ViewHolder(view)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.category_cell, parent, false)
+        val holder = ViewHolder(view)
+        //Add a viewPool to increase performance of RecycleView
+        holder.itemView.findViewById<RecyclerView>(R.id.rvGamesList).setRecycledViewPool(viewPool)
+
+        return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val category = dataSet[position]
-        holder.bind(category, position)
+        holder.bind(dataSet[position], position)
     }
 }

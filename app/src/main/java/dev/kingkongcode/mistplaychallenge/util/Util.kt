@@ -1,6 +1,6 @@
 package dev.kingkongcode.mistplaychallenge.util
 
-class Constants() {
+class Constants {
     companion object {
         val instance = Constants()
     }

@@ -11,7 +11,7 @@ import android.util.Log
 import dev.kingkongcode.mistplaychallenge.R
 
 
-const val TAG = "ConnectionStateMonitor"
+
 
 /**
  * I decided to create that class just in case is user try to use app with no connection. A dialog
@@ -22,6 +22,10 @@ open class ConnectionStateMonitor : ConnectivityManager.NetworkCallback() {
     private lateinit var networkRequest: NetworkRequest
     private lateinit var dialog: Dialog
     private lateinit var mActivity: Activity
+
+    private companion object {
+        const val TAG = "ConnectionStateMonitor"
+    }
 
     fun connectionStateMonitor() {
         //Building network request object and connection type status (to listen to)
@@ -42,10 +46,12 @@ open class ConnectionStateMonitor : ConnectivityManager.NetworkCallback() {
 
         //Creating dialog box for error message
         dialog = Dialog(activity)
-        dialog.setContentView(R.layout.no_internet_connection_msg_error)
-        dialog.setTitle("Connection Lost")
-        //I decided to put it false because i want it to force the user to be connected
-        dialog.setCancelable(false)
+        dialog.apply {
+            setContentView(R.layout.no_internet_connection_msg_error)
+            setTitle("Connection Lost")
+            //I decided to put it false because i want it to force the user to be connected
+            setCancelable(false)
+        }
     }
 
     fun disable(activity: Activity) {
