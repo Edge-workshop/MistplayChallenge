@@ -5,7 +5,6 @@ class Constants {
         val instance = Constants()
     }
 
-    val emptyString = ""
     val fakeJsonObjResponse = "[{\n" +
             " \t\t\"list_title\": \"Mistplay Favorites\",\n" +
             " \t\t\"games\": [{\n" +

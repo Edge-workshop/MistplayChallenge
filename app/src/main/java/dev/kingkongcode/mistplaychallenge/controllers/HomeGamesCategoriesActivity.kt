@@ -15,6 +15,7 @@ import org.json.JSONArray
 class HomeGamesCategoriesActivity : BaseActivity() {
     private lateinit var binding: ActivityHomeGamesCategoriesBinding
     private var categoryList = arrayListOf<GamesCategories>()
+    private lateinit var adapter: CategoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,14 +25,14 @@ class HomeGamesCategoriesActivity : BaseActivity() {
 
         //Initializing and setting RecycleView (default orientation = Vertical) with adapter
         binding.rvGamesCategories.layoutManager = LinearLayoutManager(this@HomeGamesCategoriesActivity, LinearLayoutManager.VERTICAL, false)
-        binding.rvGamesCategories.adapter = CategoryAdapter(categoryList)
+        this.adapter = CategoryAdapter(categoryList)
+        binding.rvGamesCategories.adapter = this.adapter
     }
 
     override fun onResume() {
         super.onResume()
         setUpCategoryListView()
         setUpBottomNavigation()
-
     }
 
     override fun onBackPressed() {
@@ -48,10 +49,7 @@ class HomeGamesCategoriesActivity : BaseActivity() {
             tempCategoryList.add(category)
         }
 
-        //Put all Category objects in the specific rvGamesCategories adapter list
-        categoryList.clear()
-        categoryList.addAll(tempCategoryList)
-        binding.rvGamesCategories.adapter?.notifyDataSetChanged()
+        this.adapter.update(tempCategoryList)
     }
     private fun setUpBottomNavigation() {
         //Code section for Bottom Navigation menu item
@@ -95,8 +93,7 @@ class HomeGamesCategoriesActivity : BaseActivity() {
     private fun setUpExitWarningDialog() {
         /** Decided to create a warning to display for the user if he really wanted to exit the app **/
         // Initialize a new instance
-        val builder = AlertDialog.Builder(this@HomeGamesCategoriesActivity)
-        builder.apply {
+        AlertDialog.Builder(this@HomeGamesCategoriesActivity).apply {
             // Set the alert dialog title
             setTitle(getString(R.string.exit))
             // Display a message on alert dialog
@@ -109,11 +106,10 @@ class HomeGamesCategoriesActivity : BaseActivity() {
             setNegativeButton(getString(R.string.no)) {dialog,_ ->
                 dialog.dismiss()
             }
-        }
 
-        val dialog: AlertDialog = builder.create()
-        // Display the alert dialog on app interface
-        dialog.show()
+            create()
+            show()
+        }
     }
 
     //Function display a toast for the bottom navigation

@@ -1,23 +1,18 @@
 package dev.kingkongcode.mistplaychallenge.adaptors
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import dev.kingkongcode.mistplaychallenge.R
 import dev.kingkongcode.mistplaychallenge.models.GamesCategories
 /**
  * This Class adapter is the one that show in the RecycleView (Vertical) all the games categories from the fake JSONObject.
  * It have as arguments the context and the list<GamesCategories>
  * */
-class CategoryAdapter(private val dataSet: List<GamesCategories>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(), View.OnClickListener {
+class CategoryAdapter(private val dataSet: MutableList<GamesCategories>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
     private val viewPool = RecyclerView.RecycledViewPool()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -31,11 +26,9 @@ class CategoryAdapter(private val dataSet: List<GamesCategories>) : RecyclerView
             rvGamesList.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
             //Adding the adapter to the RecycleView
             rvGamesList.adapter = GameAdapter(category.games)
-
         }
     }
 
-    override fun onClick(p0: View?) {}
     override fun getItemCount() = dataSet.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,5 +43,11 @@ class CategoryAdapter(private val dataSet: List<GamesCategories>) : RecyclerView
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(dataSet[position], position)
+    }
+
+    fun update(updatedList: List<GamesCategories>) {
+        dataSet.clear()
+        dataSet.addAll(updatedList)
+        notifyDataSetChanged()
     }
 }

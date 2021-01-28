@@ -17,17 +17,17 @@ import dev.kingkongcode.mistplaychallenge.models.Game
  * This Class adapter is the one that show in the RecycleView (Horizontal) all the games from a specific category from the fake JSONObject.
  * It have as arguments the context and the list<Game>
  * */
-class GameAdapter(private val dataSet: List<Game>) : RecyclerView.Adapter<GameAdapter.ViewHolder>(), View.OnClickListener {
+class GameAdapter(private val dataSet: List<Game>) : RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var ivGameImage: ImageView = itemView.findViewById(R.id.ivGameImage)
-        var tvGameTitle: TextView = itemView.findViewById(R.id.tvGameTitle)
+        private var ivGameImage: ImageView = itemView.findViewById(R.id.ivGameImage)
+        private var tvGameTitle: TextView = itemView.findViewById(R.id.tvGameTitle)
 
         fun bind(game: Game, position: Int) {
             //Showing the game title
             tvGameTitle.text = game.title
             //Showing the game image if there is one available or if not showing company logo
-            Glide.with(itemView.context).load(game.img).error(R.drawable.mistplay_logo).into(ivGameImage)
+            Glide.with(itemView.context).load(game.img).error(R.mipmap.mistplay_logo).into(ivGameImage)
             ivGameImage.setOnClickListener {
                 //By clicking on the image app will show a bigger object of the game selected on a Dialog box
                 showDialog(game.img, game.title)
@@ -36,28 +36,27 @@ class GameAdapter(private val dataSet: List<Game>) : RecyclerView.Adapter<GameAd
 
         private fun showDialog(mImage: String, mTitle: String) {
             //Initiate the dialog box
-            val dialog = Dialog(itemView.context).apply {
+            Dialog(itemView.context).apply {
                 requestWindowFeature(Window.FEATURE_NO_TITLE)
                 //User can click anywhere outside dialog box to cancel it
                 setCancelable(true)
                 setContentView(R.layout.game_poster_display)
-            }
-            //Showing game image or company logo if there is none
-            dialog.findViewById<ImageView>(R.id.ivGamePoster)?.let {
-                Glide.with(itemView.context).load(mImage).error(R.drawable.mistplay_logo).into(it)
-            }
-            //Showing game title
-            dialog.findViewById<TextView>(R.id.tvGameName).apply { mTitle }
-            //A way for the user to click on it to dismiss the dialog
-            dialog.findViewById<ConstraintLayout>(R.id.mainLayout).apply {
-                setOnClickListener { dialog.dismiss() }
-            }
+                //Showing game image or company logo if there is none
+                findViewById<ImageView>(R.id.ivGamePoster)?.let {
+                    Glide.with(itemView.context).load(mImage).error(R.mipmap.mistplay_logo).into(it)
+                }
+                //Showing game title
+                findViewById<TextView>(R.id.tvGameName).apply { text = mTitle }
+                //A way for the user to click on it to dismiss the dialog
+                findViewById<ConstraintLayout>(R.id.mainLayout).apply {
+                    setOnClickListener { dismiss() }
+                }
 
-            dialog.show()
+                show()
+            }
         }
     }
 
-    override fun onClick(p0: View?) {}
     override fun getItemCount() = dataSet.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

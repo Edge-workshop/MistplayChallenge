@@ -9,8 +9,6 @@ import android.view.animation.AnimationUtils
 import dev.kingkongcode.mistplaychallenge.R
 import dev.kingkongcode.mistplaychallenge.databinding.ActivityMainBinding
 
-
-
 /**
  * Splash screen with company logo
  * **/
@@ -29,10 +27,8 @@ class MainActivity : AppCompatActivity() {
         //View binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         scaleAnimationOnTitle()
         automaticIntentTransition()
-
     }
 
     private fun scaleAnimationOnTitle() {

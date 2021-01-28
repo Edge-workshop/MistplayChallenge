@@ -21,6 +21,7 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "onCreate")
+        //TODO put alternative solution if less
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             //Creating and initializing object
             cs = ConnectionStateMonitor()

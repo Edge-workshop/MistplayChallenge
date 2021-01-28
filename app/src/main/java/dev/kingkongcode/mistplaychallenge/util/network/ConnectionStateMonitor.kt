@@ -10,9 +10,6 @@ import android.net.NetworkRequest
 import android.util.Log
 import dev.kingkongcode.mistplaychallenge.R
 
-
-
-
 /**
  * I decided to create that class just in case is user try to use app with no connection. A dialog
  * box will appear and advise him that he need to be connected
