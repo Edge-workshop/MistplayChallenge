@@ -27,6 +27,10 @@ class MainActivity : AppCompatActivity() {
         //View binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun onStart() {
+        super.onStart()
         scaleAnimationOnTitle()
         automaticIntentTransition()
     }
